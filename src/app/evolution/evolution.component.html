@@ -1,0 +1,25 @@
+<irf-page titre="Calcul de pourcentage">
+	<irf-panel titre="Evolution">
+		<!-- un ReactiveForm facilite l'accès à l'état de l'input dans la classe component -->
+		<form [formGroup]="pourcentageForm">
+			<div class="mb-3">
+				<label for="utilisateur">Qui êtes vous? </label>
+				<!-- template reference variable -->
+				<select #utilisateurSelect formControlName="utilisateur" class="form-control">
+          <option *ngFor="let utilisateur of utilisateurs" [value]="utilisateur.prenom">{{utilisateur.prenom}}</option>
+        </select>
+			</div>
+			<irf-text [control]="ancienneValeur" name="ancienneValeur" label="Ancienne valeur"
+				(input)="ancienneValeurInput()"></irf-text>
+			<irf-text [control]="nouvelleValeur" name="nouvelleValeur" label="Nouvelle valeur"
+				(input)="nouvelleValeurInput()">
+			</irf-text>
+			<irf-text [control]="evolution" name="evolution" label="Evolution" (input)="evolutionInput()"></irf-text>
+			<div *ngIf="pourcentageForm.valid">
+				{{utilisateurSelect.value}}, passer de {{ancienneValeur.value | number:'1.0-2'}} à
+				{{nouvelleValeur.value | number:'1.0-2'}} représente une
+				évolution de {{evolution.value | number:'1.0-2'}}%
+			</div>
+		</form>
+	</irf-panel>
+</irf-page>
