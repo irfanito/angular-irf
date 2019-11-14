@@ -41,7 +41,7 @@ export class EvolutionComponent {
     this.calculService = calculService;
     this.utilisateurs = utilisateurService
       .getUtilisateurs()
-      .subscribe((data: Utilisateur[]) => (this.utilisateurs = data));
+      .subscribe((data: Utilisateur[]) => this.utilisateurs = data);
   }
 
   get ancienneValeur(): FormControl {
