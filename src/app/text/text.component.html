@@ -1,7 +1,0 @@
-<!-- input text -->
-<div class="mb-3">
-	<label [for]="name">{{label}}</label>
-	<!-- attribute directive modifie l'apparence de l'input en fonction de sa validité -->
-	<input type="text" class="form-control" [name]="name" [formControl]="control" (input)="forward($event)" [irfDefaultInvalid]="control">
-	<irf-message [control]="control"></irf-message>
-</div>

@@ -7,12 +7,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 
 import { AppComponent } from "./app.component";
-import { EvolutionComponent } from "./evolution/evolution.component";
-import { PageComponent } from "./page/page.component";
-import { PanelComponent } from "./panel/panel.component";
-import { MessageComponent } from "./message/message.component";
-import { TextComponent } from "./text/text.component";
-import { DefaultInvalidDirective } from "./default-invalid.directive";
+import { EvolutionComponent } from "./components/evolution/evolution.component";
+import { PageComponent } from "./core/page/page.component";
+import { PanelComponent } from "./core/panel/panel.component";
+import { MessageComponent } from "./core/message/message.component";
+import { TextComponent } from "./core/text/text.component";
+import { DefaultInvalidDirective } from "./core/default-invalid.directive";
 
 registerLocaleData(localeFr, 'fr');
 
