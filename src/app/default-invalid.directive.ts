@@ -18,9 +18,9 @@ export class DefaultInvalidDirective {
   /* au déclenchement de l'événement input sur le component qui porte la directive */
   @HostListener("input") onInput() {
     if (this.irfDefaultInvalid.invalid && this.irfDefaultInvalid.dirty) {
-      this.renderer.setElementClass(this.el.nativeElement, "is-invalid", true);
+      this.renderer.setElementClass(this.el.nativeElement, "has-error", true);
     } else {
-      this.renderer.setElementClass(this.el.nativeElement, "is-invalid", false);
+      this.renderer.setElementClass(this.el.nativeElement, "has-error", false);
     }
   }
 }
