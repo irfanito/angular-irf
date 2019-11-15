@@ -1,7 +1,8 @@
 import { from } from 'rxjs';
 import { filter, isEmpty } from 'rxjs/operators';
 import { Observable } from "rxjs";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { DecimalPipe } from "@angular/common";
 import {
   FormBuilder,
   FormGroup,
@@ -17,13 +18,16 @@ import { Utilisateur } from "../utilisateur";
 const pattern: string = "^[+|-]?[0-9]+(?:.[0-9]{1,2})?$";
 
 @Component({
+  providers: [DecimalPipe],
   selector: "irf-evolution",
   templateUrl: "./evolution.component.html"
 })
 export class EvolutionComponent {
-  calculService: CalculService;
-  utilisateurs: Utilisateur[];
+  utilisateurs: Observable<Array<Utilisateur>>;
   validFields: string[] = [];
+  /* injection de template reference variable */
+  @ViewChild("utilisateurSelect", {static:false})
+  utilisateurSelect: ElementRef;
 
   pourcentageForm = this.formBuilder.group({
     utilisateur: new FormControl(""),
@@ -35,13 +39,14 @@ export class EvolutionComponent {
   /* injection de dépendances */
   constructor(
     private formBuilder: FormBuilder,
-    calculService: CalculService,
+    private decimalPipe: DecimalPipe,
+    private calculService: CalculService,
     utilisateurService: UtilisateurService
   ) {
     this.calculService = calculService;
+    this.decimalPipe = decimalPipe;
     this.utilisateurs = utilisateurService
-      .getUtilisateurs()
-      .subscribe((data: Utilisateur[]) => this.utilisateurs = data);
+      .getUtilisateurs();
   }
 
   get ancienneValeur(): FormControl {
@@ -68,6 +73,17 @@ export class EvolutionComponent {
     this.calculer("evolution");
   }
 
+expliquer(): string {
+  let utilisateurSelectedText = this.utilisateurSelect.nativeElement.value;
+  /* utilisation de pipe dans un component */
+  let ancienneValeurText: string = this.decimalPipe.transform(this.ancienneValeur.value,"1.0-2");
+  let nouvelleValeurText: string = this.decimalPipe.transform(this.nouvelleValeur.value,"1.0-2");
+  let evolutionText: string = this.decimalPipe.transform(this.evolution.value,"1.0-2");
+  /* typescript template string */
+  return `${utilisateurSelectedText}, passer de ${ancienneValeurText} à
+				${nouvelleValeurText} représente une
+				évolution de ${evolutionText}%`
+}
   calculer(name: string) {
     /* utilisation de rxjs */
     let observable: Observable<boolean> = from(this.validFields).pipe(
@@ -79,7 +95,7 @@ export class EvolutionComponent {
     if (this.pourcentageForm.get(name).valid && !nameExists) {
       this.validFields.push(name);
     } else if (this.pourcentageForm.get(name).invalid) {
-      if (!nameExists) {
+      if (nameExists) {
         IrfArrays.removeFirst(this.validFields, name);
       }
       this.ancienneValeur.enable();
